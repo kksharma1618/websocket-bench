@@ -1,6 +1,18 @@
 # websocket bench [![Build Status](https://travis-ci.org/M6Web/websocket-bench.png?branch=master)](https://travis-ci.org/M6Web/websocket-bench)
 
 
+## NOTE
+
+This is just the fork of websocket-bench. This fork will not be maintained properly. For real project go to https://github.com/M6Web/websocket-bench.
+
+## Goals for this fork
+
+- Fix leaking port issues.
+- Customize it for our own purposes.
+
+---------
+
+
 Nodejs cli tool for benchmarking websocket servers. Currently supports:
 * [Socket.IO](https://github.com/LearnBoost/socket.io)
 * [Engine.IO](https://github.com/LearnBoost/engine.io)
