@@ -9,13 +9,15 @@ var Benchmark = require('./lib/benchmark.js'),
 program
   .version('0.0.3')
   .usage('[options] <server>')
-  .option('-a, --amount <n>', 'Total number of persistent connection, Default to 100', parseInt)
-  .option('-c, --concurency <n>', 'Concurent connection per second, Default to 20', parseInt)
+  .option('-a, --total-time <n>', 'How long to run the test. In seconds. Defaults to 300', parseInt)
+  .option('-b, --connection-time <n>', 'How long to keep connections open. In seconds. Defaults to 60', parseInt)
+  .option('-c, --connections-per-second <n>', 'How many connections to open per second', parseInt)
   .option('-w, --worker <n>', 'number of worker', parseInt)
   .option('-g, --generator <file>', 'js file for generate message or special event')
   .option('-m, --message <n>', 'number of message for a client. Default to 0', parseInt)
+  .option('-s, --message-size <n>', 'If provided then we will generate message of this size automatically. Number of bytes', parseInt)
   .option('-o, --output <output>', 'Output file')
-  .option('-t, --type <type>', 'type of websocket server to bench(socket.io, engine.io, faye, primus, wamp). Default to io')
+  .option('-t, --type <type>', 'type of websocket server to bench(socket.io, engine.io, faye, primus, wamp, dummy). Default to io. Dummy doesnt send anything. Its just for testing purpose. It just logs events')
   .option('-p, --transport <type>', 'type of transport to websocket(engine.io, websockets, browserchannel, sockjs, socket.io). Default to websockets')
   .option('-k, --keep-alive', 'Keep alive connection')
   .option('-v, --verbose', 'Verbose Logging')
@@ -36,12 +38,16 @@ if (!program.verbose) {
   program.verbose = false;
 }
 
-if (!program.amount) {
-  program.amount = 100;
+if (!program.totalTime) {
+  program.totalTime = 5*60;
 }
 
-if (!program.concurency) {
-  program.concurency = 20;
+if (!program.connectionTime) {
+  program.connectionTime = 60;
+}
+
+if (!program.connectionsPerSecond) {
+  program.connectionsPerSecond = 20;
 }
 
 if (!program.generator) {
@@ -56,6 +62,10 @@ if (!program.message) {
   program.message = 0;
 }
 
+if (!program.messageSize) {
+  program.messageSize = 0;
+}
+
 if (!program.type) {
   program.type = 'socket.io';
 }
@@ -64,7 +74,7 @@ if (program.type === 'primus' && !program.transport) {
   program.transPort = 'websockets';
 }
 
-logger.info('Launch bench with ' + program.amount + ' total connection, ' + program.concurency + ' concurent connection');
+logger.info('Launch bench for ' + program.totalTime + ' seconds, ' + program.connectionsPerSecond + ' connections per second (each will stay alive for '+connectionTime+' seconds)');
 logger.info(program.message + ' message(s) send by client');
 logger.info(program.worker + ' worker(s)');
 logger.info('WS server : ' + program.type);
@@ -107,5 +117,5 @@ process.on('SIGINT', function () {
 
 });
 
-bench.launch(program.amount, program.concurency, program.worker, program.message, program.keepAlive);
+bench.launch(program);
 
