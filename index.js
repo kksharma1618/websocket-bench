@@ -15,7 +15,7 @@ program
   .option('-w, --worker <n>', 'number of worker', parseInt)
   .option('-g, --generator <file>', 'js file for generate message or special event')
   .option('-m, --message <n>', 'number of message for a client. Default to 0', parseInt)
-  .option('-s, --message-size <n>', 'If provided then we will generate message of this size automatically. Number of bytes', parseInt)
+  .option('-e, --message-reply <n>', 'If provided then we will wait for message reply and record the time taken', parseInt)
   .option('-o, --output <output>', 'Output file')
   .option('-t, --type <type>', 'type of websocket server to bench(socket.io, engine.io, faye, primus, wamp, dummy). Default to io. Dummy doesnt send anything. Its just for testing purpose. It just logs events')
   .option('-p, --transport <type>', 'type of transport to websocket(engine.io, websockets, browserchannel, sockjs, socket.io). Default to websockets')
@@ -62,8 +62,8 @@ if (!program.message) {
   program.message = 0;
 }
 
-if (!program.messageSize) {
-  program.messageSize = 0;
+if (!program.messageReply) {
+  program.messageReply = 0;
 }
 
 if (!program.type) {
@@ -75,7 +75,7 @@ if (program.type === 'primus' && !program.transport) {
 }
 
 logger.info('Launch bench for ' + program.totalTime + ' seconds, ' + program.connectionsPerSecond + ' connections per second (each will stay alive for '+connectionTime+' seconds)');
-logger.info(program.message + ' message(s) send by client');
+logger.info(program.message + ' message(s) send by eachclient');
 logger.info(program.worker + ' worker(s)');
 logger.info('WS server : ' + program.type);
 
