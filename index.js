@@ -6,6 +6,9 @@ var Benchmark = require('./lib/benchmark.js'),
   program = require('commander'),
   logger = require('./lib/logger');
 
+
+
+
 program
   .version('0.0.3')
   .usage('[options] <server>')
