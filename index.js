@@ -103,13 +103,20 @@ if (program.output) {
 var reporter = new DefaultReporter(outputStream);
 var bench = new Benchmark(server, reporter, options);
 
+
+var killAttempts = 0;
 // On ctrl+c
 process.on('SIGINT', function () {
   logger.info("\nGracefully stoping worker from SIGINT (Ctrl+C)");
+  if(killAttempts > 10) {
+    process.exit(1);
+  }
+  killAttempts++;
 
   setTimeout(function () {
     bench.terminate();
   }, 2000);
+
 
 });
 
