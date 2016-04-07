@@ -7,7 +7,7 @@
 sudo yum update
 
 # enable epel
-sudo yum-config-manager --enable epel && yum clean all 
+sudo yum-config-manager --enable epel
 
 # install node
 sudo yum install nodejs npm
